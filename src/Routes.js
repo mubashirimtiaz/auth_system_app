@@ -6,7 +6,7 @@ import Login from "./pages/login/login.page";
 export function Routes() {
   const { isAuthorized } = useSelector(({ auth }) => {
     return {
-      isAuthorized: auth.token != null,
+      isAuthorized: auth.token !== null,
     };
   }, shallowEqual);
 
