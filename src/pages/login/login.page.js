@@ -38,6 +38,7 @@ const Login = () => {
               name="email"
             />
             <br />
+            <br />
             <ErrorMessage name="email" component="p" style={{ color: "red" }} />
             <Field
               type="password"
@@ -51,6 +52,7 @@ const Login = () => {
               component="p"
               style={{ color: "red" }}
             />
+            <br />
             <br />
             <button type="submit">Submit</button>
           </form>
