@@ -33,6 +33,14 @@ export const authSlice = createSlice({
     isPending: false,
     isError: false,
   },
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isPending = false;
+      state.isError = false;
+    },
+  },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
     [login.pending]: (state) => {
@@ -61,6 +69,6 @@ export const authSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-// export const { login } = authSlice.actions;
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
