@@ -7,13 +7,11 @@ import App from "./App";
 import "./index.css";
 import axios from "axios";
 
-const { auth } = store.getState();
-
 //added default baseUrl to every http request
 axios.defaults.baseURL = "https://accapi.bearplex.com/api/customer";
 
 //added default config for header prop i.e Authentication
-axios.defaults.headers.common["Authorization"] = `Bearer ${auth}`;
+// axios.defaults.headers.common["Authorization"] = `Bearer`;
 
 //added default config for header prop for every post request i.e Content-Type
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -24,7 +22,6 @@ axios.defaults.headers.post["Accept"] = "application/json";
 axios.interceptors.request.use(
   (request) => {
     console.log(request);
-    console.log(auth);
     return request;
   },
   (error) => {
