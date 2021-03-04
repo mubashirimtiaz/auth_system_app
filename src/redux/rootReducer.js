@@ -5,12 +5,12 @@ import persistReducer from "redux-persist/es/persistReducer";
 
 const persistConfig = {
   key: "customer-auth",
-  whitelist: ["auth"],
-  storage,
+  blacklist: ["isPending", "isError"],
+  storage: storage,
 };
 
 const rootReducer = combineReducers({
-  auth: authReducer,
+  auth: persistReducer(persistConfig, authReducer),
 });
 
-export default persistReducer(persistConfig, rootReducer);
+export default rootReducer;
