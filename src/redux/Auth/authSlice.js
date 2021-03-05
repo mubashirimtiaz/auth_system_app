@@ -21,6 +21,7 @@ export const login = createAsyncThunk(
       if (!err.response) {
         throw err;
       }
+      console.log(rejectWithValue(err.response.data));
       return rejectWithValue(err.response.data);
     }
   }
@@ -32,6 +33,9 @@ export const authSlice = createSlice({
     token: null,
     isPending: false,
     isError: false,
+    isLoggedIn: false,
+    isNetworkEstablished: true,
+    isUnAuthorized: false,
   },
   reducers: {
     logout: (state) => {
@@ -39,6 +43,9 @@ export const authSlice = createSlice({
       state.token = null;
       state.isPending = false;
       state.isError = false;
+      state.isLoggedIn = false;
+      state.isNetworkEstablished = true;
+      state.isUnAuthorized = false;
     },
   },
   extraReducers: {
@@ -48,6 +55,9 @@ export const authSlice = createSlice({
       state.token = null;
       state.isPending = true;
       state.isError = false;
+      state.isLoggedIn = false;
+      state.isNetworkEstablished = true;
+      state.isUnAuthorized = false;
     },
     [login.fulfilled]: (state, action) => {
       const {
@@ -58,12 +68,26 @@ export const authSlice = createSlice({
       state.token = token;
       state.isPending = false;
       state.isError = false;
+      state.isLoggedIn = true;
+      state.isNetworkEstablished = true;
+      state.isUnAuthorized = false;
     },
-    [login.rejected]: (state) => {
+    [login.rejected]: (state, { error, payload }) => {
       state.user = null;
       state.token = null;
       state.isPending = false;
       state.isError = true;
+      state.isLoggedIn = false;
+      if (error.message === "Network Error") {
+        state.isNetworkEstablished = false;
+      } else {
+        state.isNetworkEstablished = true;
+      }
+      if (payload.status === 401) {
+        state.isUnAuthorized = true;
+      } else {
+        state.isUnAuthorized = false;
+      }
     },
   },
 });

@@ -1,18 +1,32 @@
+import { useRef, useEffect } from "react";
 import { Redirect, Switch, Route } from "react-router-dom";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import BasePage from "./BasePage";
 import Login from "./pages/login/login.page";
-
+import { logout } from "./redux/Auth/authSlice";
 export function Routes() {
-  const { isAuthorized } = useSelector(({ auth }) => {
+  const { isLoggedIn, isUnAuthorized } = useSelector(({ auth }) => {
     return {
-      isAuthorized: auth.token !== null,
+      isLoggedIn: auth.isLoggedIn !== false,
+      isUnAuthorized: auth.isUnAuthorized,
     };
   }, shallowEqual);
 
+  const dispatch = useDispatch();
+
+  const authCheck = useRef(false);
+
+  useEffect(() => {
+    if (authCheck.current) {
+      dispatch(logout());
+    } else {
+      authCheck.current = true;
+    }
+  }, [dispatch, isUnAuthorized]);
+
   return (
     <Switch>
-      {!isAuthorized ? (
+      {!isLoggedIn ? (
         /*Render auth page when user at `/auth` and not authorized.*/
         <Route path="/auth">
           <Login />
@@ -21,7 +35,7 @@ export function Routes() {
         /*Otherwise redirect to root page (`/`)*/
         <Redirect from="/auth" to="/" />
       )}
-      {!isAuthorized ? (
+      {!isLoggedIn ? (
         /*Redirect to `/auth` when user is not authorized*/
         <Redirect to="/auth/login" />
       ) : (
