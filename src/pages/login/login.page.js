@@ -5,16 +5,20 @@ import { Formik, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 
 const Login = () => {
-  const { isPending, isError } = useSelector(({ auth }) => ({
-    isPending: auth.isPending,
-    isError: auth.isError,
-  }));
+  const { isPending, isError, isNetworkEstablished } = useSelector(
+    ({ auth }) => ({
+      isPending: auth.isPending,
+      isError: auth.isError,
+      isNetworkEstablished: auth.isNetworkEstablished,
+    })
+  );
   const dispatch = useDispatch();
   return (
     <div>
       <h1>My Form</h1>
+      {!isNetworkEstablished && <p>Something Went Wrong</p>}
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "hamadpervaiz@bearplex.com", password: "1234" }}
         validationSchema={Yup.object({
           email: Yup.string().email().required("Required"),
           password: Yup.string()
@@ -54,12 +58,18 @@ const Login = () => {
             />
             <br />
             <br />
-            <button type="submit">Submit</button>
+            {!isPending ? (
+              <button type="submit">Submit</button>
+            ) : (
+              <button type="button" disabled={true}>
+                Submitting
+              </button>
+            )}
           </form>
         )}
       </Formik>
       {isPending && <p>Loading...</p>}
-      {isError && <p>Wrong Credentials...</p>}
+      {isError && isNetworkEstablished && <p>Wrong Credentials...</p>}
     </div>
   );
 };

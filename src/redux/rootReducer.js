@@ -5,7 +5,7 @@ import persistReducer from "redux-persist/es/persistReducer";
 
 const persistConfig = {
   key: "customer-auth",
-  blacklist: ["isPending", "isError"],
+  blacklist: ["isPending", "isError", "isNetworkEstablished", "isLoggedIn"],
   storage: storage,
 };
 
